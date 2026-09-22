@@ -1,0 +1,34 @@
+.app {
+  min-height: 100vh;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  /* padding: 0 var(--space-6) var(--space-8); */
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: var(--layout-column) minmax(0, 1fr) var(--layout-column);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.center,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+@media (max-width: 1400px) {
+  .dashboard {
+    grid-template-columns: 320px minmax(0, 1fr) 320px;
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
