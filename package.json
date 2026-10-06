@@ -3,12 +3,24 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "server"
+  ],
   "scripts": {
     "dev": "vite",
+    "dev:web": "vite",
+    "dev:api": "npm run dev --workspace techcare-dashboard-server",
     "build": "tsc -b && vite build",
+    "build:api": "npm run build --workspace techcare-dashboard-server",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc -b",
+    "typecheck:api": "npm run typecheck --workspace techcare-dashboard-server",
+    "test:api": "npm run test --workspace techcare-dashboard-server",
+    "db:up": "docker compose up -d",
+    "db:migrate": "npm run prisma:migrate --workspace techcare-dashboard-server",
+    "db:deploy": "npm run prisma:deploy --workspace techcare-dashboard-server",
+    "db:import": "npm run import:coalition --workspace techcare-dashboard-server",
     "format": "prettier --write ."
   },
   "dependencies": {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styles from './App.module.css'
+import AuthScreen from './components/AuthScreen/AuthScreen'
 import Header from './components/Header/Header'
 import DiagnosisSection from './components/DiagnosisSection/DiagnosisSection'
 import DiagnosticListSection from './components/DiagnosticListSection/DiagnosticListSection'
@@ -9,6 +10,7 @@ import PagePlaceholder from './components/PagePlaceholder/PagePlaceholder'
 import PatientsPanel from './components/PatientsPanel/PatientsPanel'
 import ProfilePanel from './components/ProfilePanel/ProfilePanel'
 import { useSelectedPatient } from './features/patients/useSelectedPatient'
+import { useAuth } from './contexts/AuthContext'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import {
   isNavigationPage,
@@ -28,7 +30,8 @@ function getPageFromPath(): NavigationPage {
   return isNavigationPage(page) ? page : 'patients'
 }
 
-function App() {
+function DashboardApp() {
+  const { user, logout } = useAuth()
   const [activePage, setActivePage] = useState<NavigationPage>(getPageFromPath)
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null)
   const { patient, effectiveSelectedId } = useSelectedPatient(selectedPatientId)
@@ -58,7 +61,12 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <Header activePage={activePage} onNavigate={handleNavigate} />
+      <Header
+        activePage={activePage}
+        onNavigate={handleNavigate}
+        userName={user?.name ?? 'VitaLog user'}
+        onLogout={logout}
+      />
 
       {activePage === 'patients' ? (
         <main className={styles.dashboard}>
@@ -84,6 +92,20 @@ function App() {
       <Footer onNavigate={handleNavigate} />
     </div>
   )
+}
+
+function App() {
+  const { user, isPending } = useAuth()
+
+  if (isPending) {
+    return (
+      <main className={styles.authLoading}>
+        <p>Restoring secure session…</p>
+      </main>
+    )
+  }
+
+  return user ? <DashboardApp /> : <AuthScreen />
 }
 
 export default App

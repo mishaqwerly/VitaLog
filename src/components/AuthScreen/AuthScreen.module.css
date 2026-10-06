@@ -1,0 +1,111 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 15% 20%, rgb(1 240 208 / 18%), transparent 34%),
+    #f4f7f8;
+}
+
+.card {
+  width: min(100%, 440px);
+  padding: 40px;
+  border: 1px solid rgb(7 42 61 / 10%);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgb(7 42 61 / 12%);
+}
+
+.brand {
+  color: #072a3d;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.brand span {
+  color: #01d8bc;
+}
+
+.eyebrow {
+  margin: 30px 0 8px;
+  color: #168b7d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  margin: 0;
+  color: #072a3d;
+  font-size: 32px;
+}
+
+.intro {
+  margin: 10px 0 28px;
+  color: #667780;
+}
+
+.card form,
+.card label {
+  display: grid;
+  gap: 8px;
+}
+
+.card form {
+  gap: 18px;
+}
+
+.card label {
+  color: #173b4d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.card input {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #cad5da;
+  border-radius: 10px;
+  color: #072a3d;
+  font: inherit;
+}
+
+.card input:focus {
+  border-color: #01bfa7;
+  outline: 3px solid rgb(1 216 188 / 18%);
+}
+
+.card form button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 10px;
+  background: #072a3d;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.error {
+  margin: 0;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.switchButton {
+  display: block;
+  margin: 22px auto 0;
+  border: 0;
+  background: transparent;
+  color: #168b7d;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}

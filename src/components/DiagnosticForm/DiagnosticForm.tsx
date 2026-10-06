@@ -18,7 +18,7 @@ import {
 } from './diagnosticFormReducer'
 
 type DiagnosticFormProps = {
-  onAdd: (record: DiagnosticRecord) => Promise<void>
+  onAdd: (record: Omit<DiagnosticRecord, 'id'>) => Promise<void>
 }
 
 const FIELD_IDS = {

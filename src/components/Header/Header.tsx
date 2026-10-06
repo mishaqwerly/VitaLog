@@ -18,6 +18,8 @@ import { usePreferencesActions, usePreferencesValue } from '../../contexts/Prefe
 type HeaderProps = {
   activePage: NavigationPage
   onNavigate: (page: NavigationPage) => void
+  userName: string
+  onLogout: () => Promise<void>
 }
 
 const navigationItems = [
@@ -38,7 +40,7 @@ const navigationItems = [
   icon: ReactNode
 }>
 
-const Header = ({ activePage, onNavigate }: HeaderProps) => {
+const Header = ({ activePage, onNavigate, userName, onLogout }: HeaderProps) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   const profileTriggerRef = useRef<HTMLButtonElement>(null)
@@ -128,8 +130,8 @@ const Header = ({ activePage, onNavigate }: HeaderProps) => {
             alt=""
           />
           <span className={styles.doctorMeta}>
-            <strong>Dr. Jose Simmons</strong>
-            <span>General Practitioner</span>
+            <strong>{userName}</strong>
+            <span>Authenticated user</span>
           </span>
           <ChevronDownIcon
             className={`${styles.profileChevron}${isProfileOpen ? ` ${styles.profileChevronOpen}` : ''}`}
@@ -151,8 +153,8 @@ const Header = ({ activePage, onNavigate }: HeaderProps) => {
                 alt=""
               />
               <div className={styles.profileIdentity}>
-                <strong>Dr. Jose Simmons</strong>
-                <span>General Practitioner</span>
+                <strong>{userName}</strong>
+                <span>Authenticated user</span>
               </div>
             </div>
 
@@ -174,6 +176,19 @@ const Header = ({ activePage, onNavigate }: HeaderProps) => {
                 aria-label={isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'}
               >
                 {isDarkTheme ? 'Light' : 'Dark'}
+              </button>
+            </div>
+            <div className={styles.preference}>
+              <div>
+                <span>Session</span>
+                <strong>Secure cookie</strong>
+              </div>
+              <button
+                type="button"
+                className={styles.themeToggle}
+                onClick={() => void onLogout()}
+              >
+                Log out
               </button>
             </div>
           </div>

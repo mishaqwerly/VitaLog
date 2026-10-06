@@ -18,9 +18,11 @@ export type DiagnosisHistoryEntry = {
 }
 
 export type PatientDiagnosticItem = {
+  id: string
   name: string
   description: string
   status: string
+  note?: string
 }
 
 export type Patient = {

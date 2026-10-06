@@ -5,6 +5,7 @@ import {
   type DiagnosticStatus,
 } from '../../types/diagnostic'
 import { useSelectedPatient } from '../../features/patients/useSelectedPatient'
+import { useCreateDiagnosticMutation } from '../../features/patients/useCreateDiagnosticMutation'
 import AsyncPanel from '../../shared/ui/AsyncPanel/AsyncPanel'
 import Skeleton from '../../shared/ui/Skeleton/Skeleton'
 import ChevronDownIcon from '../ui/icons/ChevronDownIcon'
@@ -24,20 +25,20 @@ function isDiagnosticStatus(status: string): status is DiagnosticStatus {
 }
 
 function mapApiDiagnostic(
-  item: { name: string; description: string; status: string },
-  index: number,
+  item: { id: string; name: string; description: string; status: string; note?: string },
 ): DiagnosticRecord {
   return {
-    id: `api-${item.name.toLowerCase().replace(/\s+/g, '-')}-${index}`,
+    id: item.id,
     name: item.name,
     description: item.description,
     status: isDiagnosticStatus(item.status) ? item.status : 'Under Observation',
+    note: item.note,
   }
 }
 
 const DiagnosticListSection = ({ selectedPatientId }: DiagnosticListSectionProps) => {
   const { patient, isPending, isError, error, refetch } = useSelectedPatient(selectedPatientId)
-  const [localRecords, setLocalRecords] = useState<DiagnosticRecord[]>([])
+  const createDiagnosticMutation = useCreateDiagnosticMutation(patient?.id ?? null)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   const apiRecords = useMemo(
@@ -45,14 +46,8 @@ const DiagnosticListSection = ({ selectedPatientId }: DiagnosticListSectionProps
     [patient],
   )
 
-  const records = useMemo(() => [...apiRecords, ...localRecords], [apiRecords, localRecords])
-
-  const handleAddRecord = async (record: DiagnosticRecord) => {
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 500)
-    })
-
-    setLocalRecords((current) => [...current, record])
+  const handleAddRecord = async (record: Omit<DiagnosticRecord, 'id'>) => {
+    await createDiagnosticMutation.mutateAsync(record)
   }
 
   const tableSkeleton = (
@@ -105,7 +100,7 @@ const DiagnosticListSection = ({ selectedPatientId }: DiagnosticListSectionProps
             </div>
           </div>
 
-          {records.length === 0 ? (
+          {apiRecords.length === 0 ? (
             <p className={styles.emptyMessage}>No diagnostic records for this patient yet.</p>
           ) : (
             <div className={styles.tableWrap}>
@@ -118,7 +113,7 @@ const DiagnosticListSection = ({ selectedPatientId }: DiagnosticListSectionProps
                   </tr>
                 </thead>
                 <tbody>
-                  {records.map((record) => (
+                  {apiRecords.map((record) => (
                     <tr key={record.id}>
                       <th scope="row">{record.name}</th>
                       <td>

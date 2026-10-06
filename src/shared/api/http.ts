@@ -8,23 +8,48 @@ export class ApiError extends Error {
   }
 }
 
-function getAuthHeader(): string {
-  const user = import.meta.env.VITE_API_USER
-  const password = import.meta.env.VITE_API_PASSWORD
-  return `Basic ${btoa(`${user}:${password}`)}`
+type ApiRequestOptions = Omit<RequestInit, 'body'> & {
+  body?: unknown
 }
 
-export async function apiGet<T>(signal?: AbortSignal): Promise<T> {
-  const response = await fetch(import.meta.env.VITE_API_URL, {
-    headers: {
-      Authorization: getAuthHeader(),
-    },
-    signal,
+const apiBaseUrl = import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? ''
+
+export async function apiRequest<T>(
+  path: string,
+  options: ApiRequestOptions = {},
+): Promise<T> {
+  const headers = new Headers(options.headers)
+  if (options.body !== undefined) {
+    headers.set('Content-Type', 'application/json')
+  }
+
+  const response = await fetch(`${apiBaseUrl}${path}`, {
+    ...options,
+    headers,
+    credentials: 'include',
+    body: options.body === undefined ? undefined : JSON.stringify(options.body),
   })
 
   if (!response.ok) {
-    throw new ApiError(response.status, `Request failed (${response.status})`)
+    const payload = (await response.json().catch(() => null)) as {
+      message?: string
+      error?: { message?: string }
+    } | null
+    throw new ApiError(
+      response.status,
+      payload?.error?.message ??
+        payload?.message ??
+        `Request failed (${response.status})`,
+    )
+  }
+
+  if (response.status === 204) {
+    return undefined as T
   }
 
   return response.json() as Promise<T>
+}
+
+export function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+  return apiRequest<T>(path, { signal })
 }

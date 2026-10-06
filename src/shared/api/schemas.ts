@@ -5,36 +5,39 @@ const vitalLevelSchema = z.object({
   levels: z.string(),
 })
 
-const diagnosisEntryDtoSchema = z.object({
+const diagnosisHistorySchema = z.object({
   month: z.string(),
   year: z.number(),
-  blood_pressure: z.object({
+  bloodPressure: z.object({
     systolic: vitalLevelSchema,
     diastolic: vitalLevelSchema,
   }),
-  heart_rate: vitalLevelSchema,
-  respiratory_rate: vitalLevelSchema,
+  heartRate: vitalLevelSchema,
+  respiratoryRate: vitalLevelSchema,
   temperature: vitalLevelSchema,
 })
 
-const diagnosticItemDtoSchema = z.object({
+export const diagnosticRecordSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
   description: z.string(),
   status: z.string(),
+  note: z.string().optional(),
 })
 
 export const patientDtoSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
   gender: z.enum(['Female', 'Male']),
   age: z.number(),
-  profile_picture: z.string(),
-  date_of_birth: z.string(),
-  phone_number: z.string(),
-  emergency_contact: z.string(),
-  insurance_type: z.string(),
-  diagnosis_history: z.array(diagnosisEntryDtoSchema),
-  diagnostic_list: z.array(diagnosticItemDtoSchema),
-  lab_results: z.array(z.string()),
+  profilePicture: z.string(),
+  dateOfBirth: z.string(),
+  phoneNumber: z.string(),
+  emergencyContact: z.string(),
+  insuranceType: z.string(),
+  diagnosisHistory: z.array(diagnosisHistorySchema),
+  diagnosticList: z.array(diagnosticRecordSchema),
+  labResults: z.array(z.string()),
 })
 
 export const patientsResponseSchema = z.array(patientDtoSchema)

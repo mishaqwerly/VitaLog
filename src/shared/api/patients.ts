@@ -4,7 +4,7 @@ import { patientsResponseSchema } from './schemas'
 import type { Patient } from '../../types/patient'
 
 export async function fetchPatients(signal?: AbortSignal): Promise<Patient[]> {
-  const raw = await apiGet<unknown>(signal)
+  const raw = await apiGet<unknown>('/api/patients', signal)
   const parsed = patientsResponseSchema.safeParse(raw)
 
   if (!parsed.success) {

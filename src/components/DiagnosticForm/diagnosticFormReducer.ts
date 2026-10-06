@@ -49,9 +49,10 @@ export function getFirstInvalidField(errors: FieldErrors): DiagnosticFieldName |
   return order.find((field) => errors[field]) ?? null
 }
 
-export function buildDiagnosticRecord(state: FormState): DiagnosticRecord {
-  const record: DiagnosticRecord = {
-    id: crypto.randomUUID(),
+export function buildDiagnosticRecord(
+  state: FormState,
+): Omit<DiagnosticRecord, 'id'> {
+  const record: Omit<DiagnosticRecord, 'id'> = {
     name: state.name.trim(),
     description: state.description.trim(),
     status: state.status,

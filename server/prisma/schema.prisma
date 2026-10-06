@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Patient {
+  id                String             @id @default(uuid()) @db.Uuid
+  sourceKey         String             @unique
+  name              String
+  gender            String
+  age               Int
+  profilePicture    String
+  dateOfBirth       String
+  phoneNumber       String
+  emergencyContact  String
+  insuranceType     String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  diagnosisHistory  DiagnosisHistory[]
+  diagnosticRecords DiagnosticRecord[]
+  labResults        LabResult[]
+
+  @@index([name])
+}
+
+model DiagnosisHistory {
+  id                        String  @id @default(uuid()) @db.Uuid
+  patientId                 String  @db.Uuid
+  position                  Int
+  month                     String
+  year                      Int
+  systolicValue             Float
+  systolicLevels            String
+  diastolicValue            Float
+  diastolicLevels           String
+  heartRateValue            Float
+  heartRateLevels           String
+  respiratoryRateValue      Float
+  respiratoryRateLevels     String
+  temperatureValue          Float
+  temperatureLevels         String
+  patient                   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, year, month])
+  @@index([patientId])
+}
+
+model DiagnosticRecord {
+  id          String   @id @default(uuid()) @db.Uuid
+  patientId   String   @db.Uuid
+  sourceKey   String?
+  name        String
+  description String
+  status      String
+  note        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, sourceKey])
+  @@index([patientId])
+}
+
+model LabResult {
+  id        String  @id @default(uuid()) @db.Uuid
+  patientId String  @db.Uuid
+  sourceKey String
+  name      String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, sourceKey])
+  @@index([patientId])
+}
