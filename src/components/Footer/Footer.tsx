@@ -1,20 +1,27 @@
 import type { ReactNode } from 'react'
-import type { NavigationPage } from '../../types/navigation'
+import { isNavigationPage, type NavigationPage } from '../../types/navigation'
 import Logo from '../ui/icons/Logo'
 import OfficeMap from './OfficeMap'
 import styles from './Footer.module.css'
 
-type FooterProps = {
-  onNavigate: (page: NavigationPage) => void
+type FooterNavItem = {
+  id: string
+  label: string
+  href: string
 }
 
-const footerNavigation = [
+type FooterProps = {
+  onNavigate?: (page: NavigationPage) => void
+  navigation?: FooterNavItem[]
+}
+
+const defaultNavigation: FooterNavItem[] = [
   { id: 'overview', label: 'Overview', href: '/overview' },
   { id: 'patients', label: 'Patients', href: '/patients' },
   { id: 'schedule', label: 'Schedule', href: '/schedule' },
   { id: 'messages', label: 'Messages', href: '/messages' },
   { id: 'transactions', label: 'Transactions', href: '/transactions' },
-] satisfies Array<{ id: NavigationPage; label: string; href: string }>
+]
 
 const socialLinks: Array<{ label: string; shortLabel: string; href: string; icon: ReactNode }> = [
   {
@@ -37,7 +44,10 @@ const socialLinks: Array<{ label: string; shortLabel: string; href: string; icon
   },
 ]
 
-const Footer = ({ onNavigate }: FooterProps) => (
+const Footer = ({
+  onNavigate,
+  navigation = defaultNavigation,
+}: FooterProps) => (
   <footer className={styles.footer}>
     <div className={styles.inner}>
       <div className={styles.information}>
@@ -62,12 +72,14 @@ const Footer = ({ onNavigate }: FooterProps) => (
           <nav aria-labelledby="footer-navigation-heading">
             <h2 id="footer-navigation-heading">Explore</h2>
             <ul className={styles.navigationList}>
-              {footerNavigation.map((item) => (
+              {navigation.map((item) => (
                 <li key={item.id}>
                   <a
                     href={item.href}
                     onClick={(event) => {
                       if (
+                        !onNavigate ||
+                        !isNavigationPage(item.id) ||
                         event.button !== 0 ||
                         event.metaKey ||
                         event.ctrlKey ||

@@ -19,7 +19,7 @@
 
 .eyebrow {
   margin-bottom: var(--space-2);
-  color: #087f6d;
+  color: var(--color-accent);
   font-size: 12px;
   font-weight: var(--font-weight-extrabold);
   letter-spacing: 0.12em;
@@ -55,7 +55,7 @@
 }
 
 .page button:hover {
-  box-shadow: 0 8px 20px rgb(1 240 208 / 24%);
+  box-shadow: 0 8px 20px rgb(89 73 122 / 24%);
   transform: translateY(-2px);
 }
 

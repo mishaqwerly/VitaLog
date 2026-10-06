@@ -2,7 +2,7 @@ import type { NavigationPage } from '../../types/navigation'
 import BrandMark from '../ui/icons/BrandMark'
 import styles from './PagePlaceholder.module.css'
 
-type PlaceholderPage = Exclude<NavigationPage, 'patients'>
+type PlaceholderPage = Exclude<NavigationPage, 'patients' | 'schedule'>
 
 type PagePlaceholderProps = {
   page: PlaceholderPage
@@ -13,10 +13,6 @@ const pageContent: Record<PlaceholderPage, { title: string; description: string 
   overview: {
     title: 'Overview',
     description: 'A concise summary of your practice activity and patient insights will appear here.',
-  },
-  schedule: {
-    title: 'Schedule',
-    description: 'Appointments, availability, and daily planning tools are being prepared.',
   },
   messages: {
     title: 'Messages',

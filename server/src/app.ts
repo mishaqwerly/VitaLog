@@ -6,11 +6,13 @@ import { z } from 'zod'
 import type { AppConfig } from './config.js'
 import { clearAuthCookie, createRequireAuth, hashPassword, setAuthCookie, signAuthToken, verifyPassword } from './auth.js'
 import { AppError, errorHandler, notFound } from './errors.js'
-import type { DiagnosticInput, DiagnosticPatch, PatientRepository, UserRepository } from './repositories.js'
-import { serializeDiagnostic, serializePatient } from './repositories.js'
+import type { AppointmentRepository, DiagnosticInput, DiagnosticPatch, PatientRepository, UserRepository } from './repositories.js'
+import { serializeAppointment, serializeDiagnostic, serializePatient } from './repositories.js'
 import {
+  createAppointmentSchema,
   createDiagnosticSchema,
   diagnosticParamsSchema,
+  examTypes,
   loginSchema,
   patientIdSchema,
   registerSchema,
@@ -21,6 +23,7 @@ export type AppDependencies = {
   config: AppConfig
   users: UserRepository
   patients: PatientRepository
+  appointments: AppointmentRepository
 }
 
 function withoutUndefined<T extends object>(value: T): { [K in keyof T]?: Exclude<T[K], undefined> } {
@@ -29,7 +32,7 @@ function withoutUndefined<T extends object>(value: T): { [K in keyof T]?: Exclud
   }
 }
 
-export function createApp({ config, users, patients }: AppDependencies) {
+export function createApp({ config, users, patients, appointments }: AppDependencies) {
   const app = express()
   const requireAuth = createRequireAuth(config)
 
@@ -58,6 +61,29 @@ export function createApp({ config, users, patients }: AppDependencies) {
 
   app.get('/api/health', (_request, response) => {
     response.json({ status: 'ok' })
+  })
+
+  app.get('/api/clinic', (_request, response) => {
+    response.json({
+      name: 'VitaLog Clinic Wrocław',
+      examTypes: [...examTypes],
+    })
+  })
+
+  app.post('/api/clinic/appointments', async (request, response) => {
+    const input = createAppointmentSchema.parse(request.body)
+    const created = await appointments.create({
+      patientName: input.patientName,
+      phone: input.phone,
+      examType: input.examType,
+      scheduledAt: new Date(input.scheduledAt),
+      ...(input.note === undefined ? {} : { note: input.note }),
+    })
+    response.status(201).json(serializeAppointment(created))
+  })
+
+  app.get('/api/appointments', requireAuth, async (_request, response) => {
+    response.json((await appointments.findAll()).map(serializeAppointment))
   })
 
   app.post('/api/auth/register', async (request, response) => {

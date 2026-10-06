@@ -84,3 +84,15 @@ model LabResult {
   @@unique([patientId, sourceKey])
   @@index([patientId])
 }
+
+model Appointment {
+  id          String   @id @default(uuid()) @db.Uuid
+  patientName String
+  phone       String
+  examType    String
+  scheduledAt DateTime
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@index([scheduledAt])
+}

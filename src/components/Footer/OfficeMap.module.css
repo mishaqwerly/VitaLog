@@ -3,18 +3,18 @@
   min-height: 260px;
   border: 1px solid rgb(255 255 255 / 10%);
   border-radius: 20px;
-  background: #d9dcda;
+  background: #13111c;
   overflow: hidden;
   isolation: isolate;
 }
 
-.mapFrame {
+.photo {
   position: absolute;
-  inset: -1px;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  border: 0;
-  filter: grayscale(1) saturate(0.2) contrast(0.9) brightness(1.08);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 28% 42%;
 }
 
 .topFade {
@@ -26,20 +26,21 @@
   pointer-events: none;
 }
 
-.coordinates {
+.addressBadge {
   position: absolute;
   z-index: 2;
   top: var(--space-4);
   right: var(--space-4);
+  margin: 0;
   padding: var(--space-2) var(--space-3);
   border: 1px solid rgb(255 255 255 / 18%);
   border-radius: var(--radius-pill);
   color: #ffffff;
   background: rgb(21 23 26 / 76%);
   backdrop-filter: blur(12px);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--font-weight-bold);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
 .officeCard {
@@ -68,13 +69,13 @@
   height: 36px;
   border-radius: 50%;
   background: var(--color-accent);
-  box-shadow: 0 0 0 6px rgb(1 240 208 / 13%);
+  box-shadow: 0 0 0 6px rgb(89 73 122 / 22%);
 }
 
 .marker span {
   width: 12px;
   height: 12px;
-  border: 3px solid #15171a;
+  border: 3px solid #13111c;
   border-radius: 50%;
 }
 
@@ -134,7 +135,7 @@
     border-radius: var(--radius-lg);
   }
 
-  .coordinates {
+  .addressBadge {
     display: none;
   }
 

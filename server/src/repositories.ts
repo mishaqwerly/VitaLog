@@ -49,6 +49,24 @@ export type DiagnosticInput = {
 
 export type DiagnosticPatch = Partial<DiagnosticInput>
 
+export type AppointmentRecord = {
+  id: string
+  patientName: string
+  phone: string
+  examType: string
+  scheduledAt: Date
+  note: string | null
+  createdAt: Date
+}
+
+export type AppointmentInput = {
+  patientName: string
+  phone: string
+  examType: string
+  scheduledAt: Date
+  note?: string
+}
+
 export interface UserRepository {
   findByEmail(email: string): Promise<StoredUser | null>
   findSafeById(id: string): Promise<SafeUser | null>
@@ -63,6 +81,11 @@ export interface PatientRepository {
   deleteDiagnostic(patientId: string, diagnosticId: string): Promise<boolean>
 }
 
+export interface AppointmentRepository {
+  findAll(): Promise<AppointmentRecord[]>
+  create(input: AppointmentInput): Promise<AppointmentRecord>
+}
+
 const patientInclude = {
   diagnosisHistory: { orderBy: { position: 'asc' as const } },
   diagnosticRecords: { orderBy: { createdAt: 'asc' as const } },
@@ -72,6 +95,7 @@ const patientInclude = {
 export function createPrismaRepositories(prisma: PrismaClient): {
   users: UserRepository
   patients: PatientRepository
+  appointments: AppointmentRepository
 } {
   return {
     users: {
@@ -116,6 +140,22 @@ export function createPrismaRepositories(prisma: PrismaClient): {
         return result.count > 0
       },
     },
+    appointments: {
+      async findAll() {
+        return prisma.appointment.findMany({ orderBy: { scheduledAt: 'asc' } })
+      },
+      async create(input) {
+        return prisma.appointment.create({
+          data: {
+            patientName: input.patientName,
+            phone: input.phone,
+            examType: input.examType,
+            scheduledAt: input.scheduledAt,
+            ...(input.note === undefined ? {} : { note: input.note }),
+          },
+        })
+      },
+    },
   }
 }
 
@@ -128,6 +168,18 @@ export function serializeDiagnostic(
     description: record.description,
     status: record.status,
     note: record.note ?? undefined,
+  }
+}
+
+export function serializeAppointment(appointment: AppointmentRecord) {
+  return {
+    id: appointment.id,
+    patientName: appointment.patientName,
+    phone: appointment.phone,
+    examType: appointment.examType,
+    scheduledAt: appointment.scheduledAt.toISOString(),
+    note: appointment.note ?? undefined,
+    createdAt: appointment.createdAt.toISOString(),
   }
 }
 

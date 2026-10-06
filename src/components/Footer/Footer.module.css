@@ -2,8 +2,8 @@
   width: 100vw;
   margin-top: clamp(32px, 5vw, 64px);
   margin-left: calc(50% - 50vw);
-  color: #f7f8f8;
-  background: #15171a;
+  color: #f7f7f8;
+  background: #13111c;
 }
 
 .inner {
@@ -32,7 +32,7 @@
 }
 
 .brand p {
-  color: #aeb4ba;
+  color: #a3a2ae;
   font-size: var(--font-size-md);
 }
 
@@ -44,7 +44,7 @@
 
 .footer h2 {
   margin: 0 0 var(--space-3);
-  color: #8e969d;
+  color: #888794;
   font-size: 11px;
   font-weight: var(--font-weight-extrabold);
   letter-spacing: 0.1em;
@@ -73,7 +73,7 @@
 }
 
 .navigationList a {
-  color: #f7f8f8;
+  color: #f7f7f8;
   text-decoration: none;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .socialSection > span {
-  color: #8e969d;
+  color: #888794;
   font-size: 12px;
   font-weight: var(--font-weight-bold);
 }
@@ -112,7 +112,7 @@
   height: 38px;
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 50%;
-  color: #f7f8f8;
+  color: #f7f7f8;
   font-size: 11px;
   font-weight: var(--font-weight-extrabold);
   text-decoration: none;
@@ -126,7 +126,7 @@
 
 .socialSection a:hover {
   border-color: var(--color-accent);
-  color: #15171a;
+  color: #13111c;
   background: var(--color-accent);
   transform: translateY(-2px);
 }
@@ -138,7 +138,7 @@
 
 .copyright {
   margin-top: var(--space-3);
-  color: #70787f;
+  color: #6c6b77;
   font-size: 11px;
 }
 

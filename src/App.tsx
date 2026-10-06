@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import styles from './App.module.css'
 import AuthScreen from './components/AuthScreen/AuthScreen'
+import ClinicBookingPage from './components/ClinicBookingPage/ClinicBookingPage'
 import Header from './components/Header/Header'
 import DiagnosisSection from './components/DiagnosisSection/DiagnosisSection'
 import DiagnosticListSection from './components/DiagnosticListSection/DiagnosticListSection'
@@ -9,6 +10,7 @@ import LabResultsPanel from './components/LabResultsPanel/LabResultsPanel'
 import PagePlaceholder from './components/PagePlaceholder/PagePlaceholder'
 import PatientsPanel from './components/PatientsPanel/PatientsPanel'
 import ProfilePanel from './components/ProfilePanel/ProfilePanel'
+import SchedulePage from './components/SchedulePage/SchedulePage'
 import { useSelectedPatient } from './features/patients/useSelectedPatient'
 import { useAuth } from './contexts/AuthContext'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
@@ -25,14 +27,22 @@ const pageTitles: Record<NavigationPage, string> = {
   transactions: 'Transactions',
 }
 
-function getPageFromPath(): NavigationPage {
-  const page = window.location.pathname.split('/').filter(Boolean)[0] ?? 'patients'
+function getPathname(): string {
+  return window.location.pathname
+}
+
+function isClinicPath(pathname: string): boolean {
+  return pathname === '/clinic' || pathname.startsWith('/clinic/')
+}
+
+function getPageFromPath(pathname = getPathname()): NavigationPage {
+  const page = pathname.split('/').filter(Boolean)[0] ?? 'patients'
   return isNavigationPage(page) ? page : 'patients'
 }
 
 function DashboardApp() {
   const { user, logout } = useAuth()
-  const [activePage, setActivePage] = useState<NavigationPage>(getPageFromPath)
+  const [activePage, setActivePage] = useState<NavigationPage>(() => getPageFromPath())
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null)
   const { patient, effectiveSelectedId } = useSelectedPatient(selectedPatientId)
 
@@ -85,6 +95,8 @@ function DashboardApp() {
             <LabResultsPanel selectedPatientId={effectiveSelectedId} />
           </div>
         </main>
+      ) : activePage === 'schedule' ? (
+        <SchedulePage />
       ) : (
         <PagePlaceholder page={activePage} onOpenPatients={() => handleNavigate('patients')} />
       )}
@@ -96,6 +108,17 @@ function DashboardApp() {
 
 function App() {
   const { user, isPending } = useAuth()
+  const [pathname, setPathname] = useState(getPathname)
+
+  useEffect(() => {
+    const handlePopState = () => setPathname(getPathname())
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  if (isClinicPath(pathname)) {
+    return <ClinicBookingPage />
+  }
 
   if (isPending) {
     return (

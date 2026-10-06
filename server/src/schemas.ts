@@ -32,6 +32,26 @@ export const updateDiagnosticSchema = createDiagnosticSchema.partial().refine(
   { message: 'At least one field is required' },
 )
 
+export const examTypes = [
+  'Blood Tests',
+  'CT Scan',
+  'MRI',
+  'Ultrasound',
+  'ECG',
+  'General Checkup',
+] as const
+
+export const createAppointmentSchema = z.object({
+  patientName: trimmedText(120),
+  phone: z.string().trim().regex(/^[0-9+\-\s()]{6,32}$/, 'Enter a valid phone number'),
+  examType: z.enum(examTypes),
+  scheduledAt: z.iso.datetime(),
+  note: z.string().trim().max(500).optional(),
+}).strict().refine(
+  (data) => new Date(data.scheduledAt).getTime() > Date.now() - 60_000,
+  { message: 'Choose a future date and time', path: ['scheduledAt'] },
+)
+
 const vitalSchema = z.object({
   value: z.number(),
   levels: z.string(),

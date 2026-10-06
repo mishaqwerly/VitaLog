@@ -104,6 +104,10 @@ export default function AuthScreen() {
             ? 'Need an account? Register'
             : 'Already registered? Sign in'}
         </button>
+
+        <a className={styles.clinicLink} href="/clinic">
+          Book an examination as a patient
+        </a>
       </section>
     </main>
   )

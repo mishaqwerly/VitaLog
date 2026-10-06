@@ -1,6 +1,6 @@
 export type Theme = 'light' | 'dark'
 
-export const THEME_STORAGE_KEY = 'vitalog-theme'
+export const THEME_STORAGE_KEY = 'vitalog-theme-v2'
 
 export function getPreferredTheme(): Theme {
   const stored = localStorage.getItem(THEME_STORAGE_KEY)
@@ -8,7 +8,7 @@ export function getPreferredTheme(): Theme {
     return stored
   }
 
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'dark'
 }
 
 export function applyTheme(theme: Theme) {

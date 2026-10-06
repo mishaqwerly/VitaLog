@@ -43,9 +43,9 @@ const BloodPressureChart = ({ entries }: BloodPressureChartProps) => {
       {
         label: 'Systolic',
         data: visibleEntries.map((entry) => entry.bloodPressure.systolic.value),
-        borderColor: '#e66fd2',
-        backgroundColor: '#e66fd2',
-        pointBackgroundColor: '#e66fd2',
+        borderColor: '#853bce',
+        backgroundColor: '#853bce',
+        pointBackgroundColor: '#853bce',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 5,
@@ -56,9 +56,9 @@ const BloodPressureChart = ({ entries }: BloodPressureChartProps) => {
       {
         label: 'Diastolic',
         data: visibleEntries.map((entry) => entry.bloodPressure.diastolic.value),
-        borderColor: '#8c6fe6',
-        backgroundColor: '#8c6fe6',
-        pointBackgroundColor: '#8c6fe6',
+        borderColor: '#306ee8',
+        backgroundColor: '#306ee8',
+        pointBackgroundColor: '#306ee8',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 5,
@@ -98,7 +98,7 @@ const BloodPressureChart = ({ entries }: BloodPressureChartProps) => {
           display: false,
         },
         ticks: {
-          color: '#707070',
+          color: '#6c6b77',
           maxRotation: 0,
           font: {
             family: 'Manrope',
@@ -116,7 +116,7 @@ const BloodPressureChart = ({ entries }: BloodPressureChartProps) => {
           color: 'rgba(112, 112, 112, 0.16)',
         },
         ticks: {
-          color: '#707070',
+          color: '#6c6b77',
           stepSize: 20,
           font: {
             family: 'Manrope',

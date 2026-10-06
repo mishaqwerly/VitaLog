@@ -7,6 +7,9 @@ import type { AppConfig } from '../src/config.js'
 import type {
   DiagnosticInput,
   DiagnosticPatch,
+  AppointmentInput,
+  AppointmentRecord,
+  AppointmentRepository,
   PatientRecord,
   PatientRepository,
   StoredUser,
@@ -107,7 +110,29 @@ function createRepositories() {
     },
   }
 
-  return { users, patients, patientId, diagnosticId }
+  const storedAppointments: AppointmentRecord[] = []
+  const appointments: AppointmentRepository = {
+    async findAll() {
+      return [...storedAppointments].sort(
+        (left, right) => left.scheduledAt.getTime() - right.scheduledAt.getTime(),
+      )
+    },
+    async create(input: AppointmentInput) {
+      const appointment: AppointmentRecord = {
+        id: randomUUID(),
+        patientName: input.patientName,
+        phone: input.phone,
+        examType: input.examType,
+        scheduledAt: input.scheduledAt,
+        note: input.note ?? null,
+        createdAt: new Date(),
+      }
+      storedAppointments.push(appointment)
+      return appointment
+    },
+  }
+
+  return { users, patients, appointments, patientId, diagnosticId }
 }
 
 describe('API', () => {
@@ -222,5 +247,63 @@ describe('API', () => {
     await agent.post('/api/auth/logout')
     const guarded = await agent.get('/api/patients')
     expect(guarded.status).toBe(401)
+  })
+
+  it('accepts a public clinic booking and shows it on the doctor schedule', async () => {
+    const repositories = createRepositories()
+    const agent = request.agent(createApp({ config, ...repositories }))
+    const scheduledAt = new Date(Date.now() + 86_400_000).toISOString()
+
+    const clinic = await agent.get('/api/clinic')
+    expect(clinic.status).toBe(200)
+    expect(clinic.body.examTypes).toContain('Blood Tests')
+
+    const created = await agent.post('/api/clinic/appointments').send({
+      patientName: 'Anna Kowalska',
+      phone: '+48 123 456 789',
+      examType: 'Blood Tests',
+      scheduledAt,
+      note: 'Morning slot preferred',
+    })
+    expect(created.status).toBe(201)
+    expect(created.body).toMatchObject({
+      patientName: 'Anna Kowalska',
+      examType: 'Blood Tests',
+      note: 'Morning slot preferred',
+    })
+
+    const unauthenticated = await agent.get('/api/appointments')
+    expect(unauthenticated.status).toBe(401)
+
+    await agent.post('/api/auth/register').send({
+      name: 'Doctor Example',
+      email: 'schedule@example.com',
+      password: 'secure-password',
+    })
+
+    const schedule = await agent.get('/api/appointments')
+    expect(schedule.status).toBe(200)
+    expect(schedule.body).toEqual([
+      expect.objectContaining({
+        id: created.body.id,
+        patientName: 'Anna Kowalska',
+        phone: '+48 123 456 789',
+        examType: 'Blood Tests',
+      }),
+    ])
+  })
+
+  it('rejects past clinic bookings', async () => {
+    const repositories = createRepositories()
+    const response = await request(createApp({ config, ...repositories }))
+      .post('/api/clinic/appointments')
+      .send({
+        patientName: 'Anna Kowalska',
+        phone: '+48 123 456 789',
+        examType: 'Blood Tests',
+        scheduledAt: new Date(Date.now() - 86_400_000).toISOString(),
+      })
+    expect(response.status).toBe(400)
+    expect(response.body.error.code).toBe('VALIDATION_ERROR')
   })
 })

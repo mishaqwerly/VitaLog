@@ -52,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logout()
     setUser(null)
     queryClient.removeQueries({ queryKey: ['patients'] })
+    queryClient.removeQueries({ queryKey: ['appointments'] })
   }
 
   return (

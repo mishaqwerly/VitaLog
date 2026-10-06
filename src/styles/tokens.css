@@ -2,24 +2,25 @@
 [data-theme='light'] {
   color-scheme: light;
 
-  /* Colors */
-  --color-bg: #f6f7f8;
+  /* Railway-inspired palette: cool gray + dusty purple */
+  --color-bg: #f7f7f8;
   --color-surface: #ffffff;
-  --color-text: #072635;
-  --color-text-muted: #707070;
-  --color-border: #ededed;
-  --color-accent: #01f0d0;
-  --color-accent-soft: #d8fcf7;
-  --color-chart-surface: #f4f0fe;
-  --color-systolic: #e66fd2;
-  --color-diastolic: #8c6fe6;
-  --color-vital-respiratory: #e0f3fa;
-  --color-vital-temperature: #ffe6e9;
-  --color-vital-heart: #ffe6f1;
-  --color-scrollbar: #c8ccd4;
-  --color-hover: #f7f7f7;
-  --color-error: #b42318;
-  --color-on-accent: #072635;
+  --color-text: #13111c;
+  --color-text-muted: #6c6b77;
+  --color-border: #e4e3ea;
+  --color-accent: #59497a;
+  --color-accent-hover: #6d5d8e;
+  --color-accent-soft: #ece8f4;
+  --color-chart-surface: #eeeaf6;
+  --color-systolic: #853bce;
+  --color-diastolic: #306ee8;
+  --color-vital-respiratory: #e4f6f6;
+  --color-vital-temperature: #fde8ea;
+  --color-vital-heart: #f8e8f4;
+  --color-scrollbar: #c5c4cd;
+  --color-hover: #f2f2f5;
+  --color-error: #b62b2a;
+  --color-on-accent: #ffffff;
   --color-chart-overlay: rgb(255 255 255 / 35%);
 
   /* Radii */
@@ -29,7 +30,7 @@
   --radius-pill: 41px;
 
   /* Elevation */
-  --shadow-card: 0 4px 20px rgb(0 0 0 / 4%);
+  --shadow-card: 0 8px 28px rgb(19 17 28 / 8%);
 
   /* Typography */
   --font-family: 'Manrope', 'Segoe UI', sans-serif;
@@ -61,24 +62,25 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --color-bg: #0b1218;
-  --color-surface: #15202b;
-  --color-text: #e8eef3;
-  --color-text-muted: #9aa8b5;
-  --color-border: #2a3544;
-  --color-accent: #5ec9bc;
-  --color-accent-soft: #1a3336;
-  --color-chart-surface: #221b35;
-  --color-systolic: #e66fd2;
-  --color-diastolic: #8c6fe6;
-  --color-vital-respiratory: #173040;
+  --color-bg: #13111c;
+  --color-surface: #1c1a28;
+  --color-text: #f7f7f8;
+  --color-text-muted: #a3a2ae;
+  --color-border: #33323e;
+  --color-accent: #6d5d8e;
+  --color-accent-hover: #8b7bb5;
+  --color-accent-soft: #291839;
+  --color-chart-surface: #22183a;
+  --color-systolic: #b57ae8;
+  --color-diastolic: #6b9bff;
+  --color-vital-respiratory: #163032;
   --color-vital-temperature: #3a2228;
-  --color-vital-heart: #3a2230;
-  --color-scrollbar: #3a4654;
-  --color-hover: #1c2733;
-  --color-error: #ff8a80;
-  --color-on-accent: #072635;
+  --color-vital-heart: #32203a;
+  --color-scrollbar: #54535f;
+  --color-hover: #211f2d;
+  --color-error: #e05c5b;
+  --color-on-accent: #ffffff;
   --color-chart-overlay: rgb(255 255 255 / 8%);
 
-  --shadow-card: 0 8px 24px rgb(0 0 0 / 28%);
+  --shadow-card: 0 12px 32px rgb(0 0 0 / 32%);
 }

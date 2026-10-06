@@ -34,7 +34,7 @@
 }
 
 .online .indicator {
-  color: #0aa68e;
+  color: var(--color-accent);
   background: var(--color-accent-soft);
 }
 
@@ -64,7 +64,7 @@
 }
 
 .online .value {
-  color: #087f6d;
+  color: var(--color-accent);
 }
 
 .offline .value {
